@@ -6,8 +6,8 @@ Find executables installed locally by npm, yarn, composer, stack, pip, gem...
 
 When we use packages like flycheck, company, lsp we often install the
 tools locally in a specific version using a package manager.  These
-tools often only look for a globally installed executable which might
-not be what we want.
+packages often only look for a globally installed executable which
+might not be what we want.
 
 ## Usage
 
@@ -25,7 +25,7 @@ You can substitute `"flow"` with any binray you want.
 The general pattern is:
 
 ``` emacs-lisp
-(defun find-local-executable-PLATFORM (binary &optional use-global))
+(defun find-local-executable-PLATFORM (binary &optional use-global-fallback))
 ```
 
 On top of that, we support many popular packages out of the box.  For
