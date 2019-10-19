@@ -6,7 +6,7 @@
 ;; Maintainer: Matúš Goljer <matus.goljer@gmail.com>
 ;; Version: 0.0.1
 ;; Created: 19th October 2019
-;; Package-requires: ((dash "2.10.0"))
+;; Package-requires: ()
 ;; Keywords: files, convenience
 
 ;; This program is free software; you can redistribute it and/or
@@ -26,29 +26,48 @@
 
 ;;; Code:
 
+(defun find-local-executable--vendored
+    (vendor-root-dir vendor-bin-dir binary use-global-fallback)
+  "Find a vendored binary.
+
+First, detect the project root by looking up the file hierarchy until
+VENDOR-ROOT-DIR is found.  Then relative to the root, find
+VENDOR-BIN-DIR.
+
+Look up BINARY in this directory.  If it does not exist and
+USE-GLOBAL-FALLBACK is non-nil, look for a globally installed
+executable with `executable-find'.
+
+Return full path to the executable or nil if not found."
+  (let ((local
+         (when-let
+             ((root (locate-dominating-file default-directory vendor-root-dir))
+              (executable (expand-file-name (concat root vendor-bin-dir binary))))
+           (and (file-exists-p executable) executable))))
+    (if local
+        local
+      (when use-global-fallback
+        (executable-find binary)))))
+
 
 ;;; nodejs
 
-(defun find-local-executable-nodejs (binary &optional use-global)
+(defun find-local-executable-nodejs (binary &optional use-global-fallback)
   "Find locally installed BINARY.
 
 Return full path to the BINARY or nil if not found.
 
-If USE-GLOBAL is non-nil, try to locate globally installed binary
-of the same name."
-  (if-let ((root (locate-dominating-file default-directory "node_modules"))
-           (executable (concat root "node_modules/.bin/" binary)))
-      (expand-file-name executable)
-    (when use-global
-      (executable-find binary))))
+If USE-GLOBAL-FALLBACK is non-nil, try to locate globally installed
+binary of the same name."
+  (find-local-executable--vendored
+   "node_modules" "node_modules/.bin/" binary use-global-fallback))
 
 (eval-when-compile
   (defvar company-flow-executable)
   (defvar flow-minor-default-binary)
   (defvar flycheck-javascript-flow-coverage-executable)
   (defvar flycheck-javascript-flow-executable)
-  (defvar lsp-clients-flow-server)
-  )
+  (defvar lsp-clients-flow-server))
 
 ;;;###autoload
 (defun find-local-executable-nodejs-setup-flow ()
@@ -59,8 +78,7 @@ of the same name."
     (setq-local flow-minor-default-binary executable)
     (setq-local flycheck-javascript-flow-coverage-executable executable)
     (setq-local flycheck-javascript-flow-executable executable)
-    (setq-local lsp-clients-flow-server executable)
-    ))
+    (setq-local lsp-clients-flow-server executable)))
 
 (eval-when-compile
   (defvar flycheck-javascript-eslint-executable))
@@ -70,8 +88,7 @@ of the same name."
   "Setup paths to eslint executable for current buffer"
   (interactive)
   (let ((executable (find-local-executable-nodejs "eslint")))
-    (setq-local flycheck-javascript-eslint-executable executable)
-    ))
+    (setq-local flycheck-javascript-eslint-executable executable)))
 
 
 ;;; typescript
@@ -86,8 +103,42 @@ of the same name."
   "Setup paths to tslint executable for current buffer"
   (interactive)
   (let ((executable (find-local-executable-typescript "tslint")))
-    (setq-local flycheck-typescript-tslint-executable executable)
-    ))
+    (setq-local flycheck-typescript-tslint-executable executable)))
+
+
+;;; php
+
+(defun find-local-executable-php (binary &optional use-global-fallback)
+  "Find locally installed BINARY.
+
+Return full path to the BINARY or nil if not found.
+
+If USE-GLOBAL-FALLBACK is non-nil, try to locate globally installed
+binary of the same name."
+  (find-local-executable--vendored
+   "vendor" "vendor/bin/" binary use-global-fallback))
+
+(eval-when-compile
+  (defvar flycheck-php-phpstan-executable))
+
+;;;###autoload
+(defun find-local-executable-php-setup-phpstan ()
+  "Setup paths to phpstan executable for current buffer"
+  (interactive)
+  (if-let ((executable (find-local-executable-php "phpstan")))
+      (setq-local flycheck-php-phpstan-executable executable)
+    (when-let ((executable (find-local-executable-php "phpstan.phar")))
+      (setq-local flycheck-php-phpstan-executable executable))))
+
+(eval-when-compile
+  (defvar flycheck-php-phpcs-executable))
+
+;;;###autoload
+(defun find-local-executable-php-setup-phpcs ()
+  "Setup paths to phpcs executable for current buffer"
+  (interactive)
+  (when-let ((executable (find-local-executable-php "phpcs")))
+    (setq-local flycheck-php-phpcs-executable executable)))
 
 (provide 'find-local-executable)
 ;;; find-local-executable.el ends here

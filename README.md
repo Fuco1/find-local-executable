@@ -58,7 +58,7 @@ a pull request!
 
 ## Supported platforms
 
-### nodejs
+### nodejs [via npm, yarn]
 
 Binary:
 
@@ -73,7 +73,7 @@ Supported binaries:
 (find-local-executable-nodejs-setup-eslint)
 ```
 
-### typescript
+### typescript [via npm, yarn]
 
 Binary:
 
@@ -85,4 +85,19 @@ Supported binaries:
 
 ``` emacs-lisp
 (find-local-executable-typescript-setup-tslint)
+```
+
+### php [via composer]
+
+Binary:
+
+``` emacs-lisp
+(find-local-executable-php BINARY)
+```
+
+Supported binaries:
+
+``` emacs-lisp
+(find-local-executable-php-setup-phpstan)
+(find-local-executable-php-setup-phpcs)
 ```
