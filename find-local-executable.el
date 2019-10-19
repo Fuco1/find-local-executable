@@ -36,7 +36,7 @@ If USE-GLOBAL is non-nil, try to locate globally installed binary
 of the same name."
   (if-let ((root (locate-dominating-file default-directory "node_modules"))
            (executable (concat root "node_modules/.bin/" binary)))
-      executable
+      (expand-file-name executable)
     (when use-global
       (executable-find binary))))
 
