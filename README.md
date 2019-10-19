@@ -72,3 +72,17 @@ Supported binaries:
 (find-local-executable-nodejs-setup-flow)
 (find-local-executable-nodejs-setup-eslint)
 ```
+
+### typescript
+
+Binary:
+
+``` emacs-lisp
+(find-local-executable-typescript BINARY)
+```
+
+Supported binaries:
+
+``` emacs-lisp
+(find-local-executable-typescript-setup-tslint)
+```

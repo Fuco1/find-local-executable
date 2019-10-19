@@ -26,6 +26,9 @@
 
 ;;; Code:
 
+
+;;; nodejs
+
 (defun find-local-executable-nodejs (binary &optional use-global)
   "Find locally installed BINARY.
 
@@ -68,6 +71,22 @@ of the same name."
   (interactive)
   (let ((executable (find-local-executable-nodejs "eslint")))
     (setq-local flycheck-javascript-eslint-executable executable)
+    ))
+
+
+;;; typescript
+
+(defalias 'find-local-executable-typescript 'find-local-executable-nodejs)
+
+(eval-when-compile
+  (defvar flycheck-typescript-tslint-executable))
+
+;;;###autoload
+(defun find-local-executable-typescript-setup-tslint ()
+  "Setup paths to tslint executable for current buffer"
+  (interactive)
+  (let ((executable (find-local-executable-typescript "tslint")))
+    (setq-local flycheck-typescript-tslint-executable executable)
     ))
 
 (provide 'find-local-executable)
