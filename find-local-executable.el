@@ -42,19 +42,21 @@ of the same name."
 
 (eval-when-compile
   (defvar company-flow-executable)
-  (defvar lsp-clients-flow-server)
   (defvar flow-minor-default-binary)
+  (defvar flycheck-javascript-flow-coverage-executable)
   (defvar flycheck-javascript-flow-executable)
-  (defvar flycheck-javascript-flow-coverage-executable))
+  (defvar lsp-clients-flow-server)
+  )
 
 (defun find-local-executable-nodejs-setup-flow ()
   "Setup paths to flow executable for current buffer"
   (let ((executable (find-local-executable-nodejs "flow")))
     (setq-local company-flow-executable executable)
-    (setq-local lsp-clients-flow-server executable)
     (setq-local flow-minor-default-binary executable)
+    (setq-local flycheck-javascript-flow-coverage-executable executable)
     (setq-local flycheck-javascript-flow-executable executable)
-    (setq-local flycheck-javascript-flow-coverage-executable executable)))
+    (setq-local lsp-clients-flow-server executable)
+    ))
 
 (provide 'find-local-executable)
 ;;; find-local-executable.el ends here
