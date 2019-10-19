@@ -26,7 +26,6 @@
 
 ;;; Code:
 
-
 (defun find-local-executable-nodejs (binary &optional use-global)
   "Find locally installed BINARY.
 
@@ -48,8 +47,10 @@ of the same name."
   (defvar lsp-clients-flow-server)
   )
 
+;;;###autoload
 (defun find-local-executable-nodejs-setup-flow ()
   "Setup paths to flow executable for current buffer"
+  (interactive)
   (let ((executable (find-local-executable-nodejs "flow")))
     (setq-local company-flow-executable executable)
     (setq-local flow-minor-default-binary executable)
