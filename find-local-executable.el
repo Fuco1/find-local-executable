@@ -59,5 +59,16 @@ of the same name."
     (setq-local lsp-clients-flow-server executable)
     ))
 
+(eval-when-compile
+  (defvar flycheck-javascript-eslint-executable))
+
+;;;###autoload
+(defun find-local-executable-nodejs-setup-eslint ()
+  "Setup paths to eslint executable for current buffer"
+  (interactive)
+  (let ((executable (find-local-executable-nodejs "eslint")))
+    (setq-local flycheck-javascript-eslint-executable executable)
+    ))
+
 (provide 'find-local-executable)
 ;;; find-local-executable.el ends here
