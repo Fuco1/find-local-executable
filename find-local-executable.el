@@ -105,6 +105,13 @@ binary of the same name."
   (let ((executable (find-local-executable-typescript "tslint")))
     (setq-local flycheck-typescript-tslint-executable executable)))
 
+;;;###autoload
+(defun find-local-executable-typescript-setup-prettier ()
+  "Setup paths to prettier executable for current buffer"
+  (interactive)
+  (let ((executable (find-local-executable-typescript "prettier")))
+    (setq-local prettier-js-command executable)))
+
 
 ;;; php
 

@@ -85,6 +85,7 @@ Supported binaries:
 
 ``` emacs-lisp
 (find-local-executable-typescript-setup-tslint)
+(find-local-executable-typescript-setup-prettier)
 ```
 
 ### php [via composer]
